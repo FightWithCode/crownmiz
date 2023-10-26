@@ -148,6 +148,16 @@ CORS_ORIGIN_REGEX_WHITELIST = [
     'http://localhost:4200',
 ]
 
+CORS_ALLOW_HEADERS = (
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    # "x-requested-with",
+    "x-api-key"
+)
+
 AUTH_USER_MODEL = 'users.User'
 
 REST_FRAMEWORK = {
@@ -155,3 +165,5 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+X_API_KEY = "V4SmuP3Xpf5u6RhizrDSWVVcR1VioVEw"

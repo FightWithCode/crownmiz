@@ -11,9 +11,11 @@ from drf_yasg import openapi
 from categories.models import Category
 from categories.serializers import CategorySerializer
 
+from core.authentication import IsSpecialAuthenticated
+
 
 class CreateCategoryView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSpecialAuthenticated]
 
     @swagger_auto_schema(
         operation_description="Category Create API",
@@ -28,7 +30,7 @@ class CreateCategoryView(APIView):
                 serializer.save()
                 response['msg'] = 'category created'
                 response['data'] = serializer.data
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                return Response(response, status=status.HTTP_200_OK)
             else:
                 response["msg"] = "error"
                 response["error"] = serializer.errors
@@ -62,7 +64,7 @@ class AllCategoriesView(APIView):
             serializer = CategorySerializer(category_objs, many=True)
             response['msg'] = 'categories fetched'
             response['data'] = serializer.data
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)
@@ -70,7 +72,7 @@ class AllCategoriesView(APIView):
 
 
 class CategoryView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsSpecialAuthenticated]
 
     @swagger_auto_schema(
         operation_description="Get Single Category API",
@@ -83,7 +85,7 @@ class CategoryView(APIView):
             serializer = CategorySerializer(category_obj)
             response['msg'] = 'category fetched'
             response['data'] = serializer.data
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)
@@ -103,7 +105,7 @@ class CategoryView(APIView):
                 serializer.save()
                 response['msg'] = 'category updated'
                 response['data'] = serializer.data
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                return Response(response, status=status.HTTP_200_OK)
             else:
                 response["msg"] = "error"
                 response["error"] = serializer.errors
@@ -122,7 +124,7 @@ class CategoryView(APIView):
         try:
             Category.objects.get(id=id).delete()
             response['msg'] = 'category deleted'
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)

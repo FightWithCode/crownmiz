@@ -8,10 +8,12 @@ from drf_yasg import openapi
 
 from core.models import Movie, Song
 from core.serializers import MovieSerializer, SongSerializer
+from core.authentication import IsSpecialAuthenticated
+
 
 
 class CreatMovieView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSpecialAuthenticated]
 
     @swagger_auto_schema(
         operation_description="Movie Create API",
@@ -26,7 +28,7 @@ class CreatMovieView(APIView):
                 serializer.save()
                 response['msg'] = 'movie created'
                 response['data'] = serializer.data
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                return Response(response, status=status.HTTP_200_OK)
             else:
                 response["msg"] = "error"
                 response["error"] = serializer.errors
@@ -38,7 +40,7 @@ class CreatMovieView(APIView):
     
 
 class AllMovieView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsSpecialAuthenticated]
 
     search = openapi.Parameter(
         "search",
@@ -60,7 +62,7 @@ class AllMovieView(APIView):
             serializer = MovieSerializer(movies_objs, many=True)
             response['msg'] = 'movies fetched'
             response['data'] = serializer.data
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)
@@ -68,7 +70,7 @@ class AllMovieView(APIView):
 
 
 class MovieView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsSpecialAuthenticated]
 
     @swagger_auto_schema(
         operation_description="Get Single Movie API",
@@ -81,7 +83,7 @@ class MovieView(APIView):
             serializer = MovieSerializer(movies_objs)
             response['msg'] = 'movie fetched'
             response['data'] = serializer.data
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)
@@ -101,7 +103,7 @@ class MovieView(APIView):
                 serializer.save()
                 response['msg'] = 'movie updated'
                 response['data'] = serializer.data
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                return Response(response, status=status.HTTP_200_OK)
             else:
                 response["msg"] = "error"
                 response["error"] = serializer.errors
@@ -120,7 +122,7 @@ class MovieView(APIView):
         try:
             Movie.objects.get(id=id).delete()
             response['msg'] = 'movie deleted'
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)
@@ -128,7 +130,7 @@ class MovieView(APIView):
         
 
 class CreatSongView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSpecialAuthenticated]
 
     @swagger_auto_schema(
         operation_description="Song Create API",
@@ -143,7 +145,7 @@ class CreatSongView(APIView):
                 serializer.save()
                 response['msg'] = 'song created'
                 response['data'] = serializer.data
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                return Response(response, status=status.HTTP_200_OK)
             else:
                 response["msg"] = "error"
                 response["error"] = serializer.errors
@@ -155,7 +157,7 @@ class CreatSongView(APIView):
     
 
 class AllSongView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsSpecialAuthenticated]
 
     search = openapi.Parameter(
         "search",
@@ -193,7 +195,7 @@ class AllSongView(APIView):
             serializer = SongSerializer(song_objs, many=True)
             response['msg'] = 'song fetched'
             response['data'] = serializer.data
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)
@@ -201,7 +203,7 @@ class AllSongView(APIView):
 
 
 class SongView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsSpecialAuthenticated]
 
     @swagger_auto_schema(
         operation_description="Get Single Song API",
@@ -234,7 +236,7 @@ class SongView(APIView):
                 serializer.save()
                 response['msg'] = 'song updated'
                 response['data'] = serializer.data
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                return Response(response, status=status.HTTP_200_OK)
             else:
                 response["msg"] = "error"
                 response["error"] = serializer.errors
@@ -253,7 +255,7 @@ class SongView(APIView):
         try:
             Song.objects.get(id=id).delete()
             response['msg'] = 'song deleted'
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)

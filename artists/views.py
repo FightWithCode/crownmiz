@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from core.authentication import IsSpecialAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -26,7 +27,7 @@ class CreatArtistView(APIView):
                 serializer.save()
                 response['msg'] = 'artist created'
                 response['data'] = serializer.data
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                return Response(response, status=status.HTTP_200_OK)
             else:
                 response["msg"] = "error"
                 response["error"] = serializer.errors
@@ -38,7 +39,7 @@ class CreatArtistView(APIView):
     
 
 class AllArtistView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsSpecialAuthenticated]
 
     search = openapi.Parameter(
         "search",
@@ -60,7 +61,7 @@ class AllArtistView(APIView):
             serializer = ArtistSerializer(artist_objs, many=True)
             response['msg'] = 'artists fetched'
             response['data'] = serializer.data
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)
@@ -68,7 +69,7 @@ class AllArtistView(APIView):
 
 
 class ArtistView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsSpecialAuthenticated]
 
     @swagger_auto_schema(
         operation_description="Get Single Artist API",
@@ -81,7 +82,7 @@ class ArtistView(APIView):
             serializer = ArtistSerializer(artist_objs)
             response['msg'] = 'artist fetched'
             response['data'] = serializer.data
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)
@@ -101,7 +102,7 @@ class ArtistView(APIView):
                 serializer.save()
                 response['msg'] = 'artist updated'
                 response['data'] = serializer.data
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                return Response(response, status=status.HTTP_200_OK)
             else:
                 response["msg"] = "error"
                 response["error"] = serializer.errors
@@ -121,7 +122,7 @@ class ArtistView(APIView):
         try:
             Artist.objects.get(id=id).delete()
             response['msg'] = 'artist deleted'
-            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             response["msg"] = "error"
             response["error"] = str(e)
